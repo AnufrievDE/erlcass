@@ -61,8 +61,20 @@ case $OS in
 
             *) echo "Your system $KERNEL is not supported"
         esac
-        export CFLAGS="-fPIC -Wno-class-memaccess -Wno-error=deprecated-copy"
-		export CXXFLAGS="-fPIC -Wno-class-memaccess -Wno-error=deprecated-copy"
+	GCC_MAJOR_VER=$(gcc --version | head -n1 | awk '{print $NF;}' | awk -F "." '{print $1};')
+	GXX_MAJOR_VER=$(g++  --version | head -n1 | awk '{print $NF;}' | awk -F "." '{print $1};')
+
+	if [[ $GCC_MAJOR_VER == "9" ]]; then
+	    export CFLAGS="-fPIC -Wno-class-memaccess -Wno-error=deprecated-copy"
+        else
+	    export CFLAGS="-fPIC -Wno-class-memaccess"
+	fi
+
+	if [[ $GXX_MAJOR_VER == "9" ]]; then
+	    export CXXFLAGS="-fPIC -Wno-class-memaccess -Wno-error=deprecated-copy"
+        else
+	    export CXXFLAGS="-fPIC -Wno-class-memaccess"
+	fi
     ;;
 
     Darwin)
